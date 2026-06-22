@@ -7,6 +7,7 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
+const STATIC_PROJECT_VERSION = "ngocnga-mobile-fresh-20260622-1";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
@@ -136,14 +137,11 @@ function photoMediaId(number) {
 }
 
 function photoFolderSrc(number) {
-  return `public/photos/${number}.png`;
+  return `public/photos/${number}${number === 40 ? ".JPG" : ".jpg"}`;
 }
 
 function imageCssSources(src) {
-  const match = String(src || "").match(/^public\/photos\/(\d+)\.(png|jpe?g|webp)$/i);
-  if (!match) return `url("${src}")`;
-  const base = `public/photos/${match[1]}`;
-  return [`${base}.jpg`, `${base}.jpeg`, `${base}.png`, `${base}.webp`].map((candidate) => `url("${candidate}")`).join(", ");
+  return `url("${src}")`;
 }
 
 function imageSourceCandidates(src) {
@@ -151,7 +149,7 @@ function imageSourceCandidates(src) {
   const match = String(src).match(/^public\/photos\/(\d+)\.(png|jpe?g|webp)$/i);
   if (!match) return [src];
   const base = `public/photos/${match[1]}`;
-  return [...new Set([src, `${base}.jpg`, `${base}.jpeg`, `${base}.png`, `${base}.webp`])];
+  return [...new Set([src, `${base}.jpg`, `${base}.JPG`, `${base}.jpeg`, `${base}.png`, `${base}.webp`])];
 }
 
 function loadImageSize(src) {
@@ -400,11 +398,24 @@ async function loadProject() {
     if (serverProject) return serverProject;
   }
 
+  if (!isAdminMode) {
+    const staticProject = await loadStaticProject().catch(() => null);
+    if (staticProject) {
+      clearSavedProject().catch(() => {});
+      return staticProject;
+    }
+  }
+
   const indexedProject = await loadProjectFromIndexedDb().catch(() => null);
   if (indexedProject) return indexedProject;
 
   const stored = localStorage.getItem(STORAGE_KEY);
   return stored ? JSON.parse(stored) : null;
+}
+
+async function loadStaticProject() {
+  const response = await fetch(`project.json?cb=${STATIC_PROJECT_VERSION}`, { cache: "no-store" });
+  return response.ok ? response.json() : null;
 }
 
 async function loadProjectFromServer() {
