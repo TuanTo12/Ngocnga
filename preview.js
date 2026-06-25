@@ -68,6 +68,7 @@ let shouldResumeMusicAfterVideo = false;
 let isMusicDuckedForVideo = false;
 let videoManifestFiles = null;
 const pointers = new Map();
+const detailPointers = new Map();
 const pendingThemeFiles = new Map();
 const pendingLayerFiles = new Map();
 let mediaFilter = "photo";
@@ -75,6 +76,10 @@ let saveTimer = null;
 let serverProjectMeta = null;
 let remoteSyncTimer = null;
 let isApplyingRemoteProject = false;
+let detailPhotoZoom = 1;
+let detailPhotoPan = { x: 0, y: 0 };
+let detailPhotoPanStart = null;
+let detailPinchStart = null;
 const projectChannel = "BroadcastChannel" in window ? new BroadcastChannel("fragments-of-nga-project") : null;
 
 const fallbackProject = {
@@ -1577,11 +1582,105 @@ function setDetailPhotoRatio(width, height) {
   const safeHeight = Math.max(1, Number(height) || 5);
   const ratio = safeWidth / safeHeight;
   const viewport = window.visualViewport;
-  const maxWidth = Math.min((viewport?.width ?? innerWidth) * 0.86, 430);
-  const maxHeight = Math.min((viewport?.height ?? innerHeight) * 0.6, 560);
+  const viewportWidth = viewport?.width ?? innerWidth;
+  const viewportHeight = viewport?.height ?? innerHeight;
+  const desktop = viewportWidth >= 768;
+  const maxWidth = desktop
+    ? Math.min(viewportWidth * 0.64, 820)
+    : Math.min(viewportWidth * 0.86, 430);
+  const maxHeight = desktop
+    ? Math.min(viewportHeight * 0.66, 760)
+    : Math.min(viewportHeight * 0.6, 560);
   const frameWidth = Math.max(230, Math.min(maxWidth, maxHeight * ratio));
   detailPhoto.style.setProperty("--detail-ratio", `${Math.round(safeWidth)} / ${Math.round(safeHeight)}`);
   detailPhoto.style.setProperty("--detail-frame-width", `${Math.round(frameWidth)}px`);
+}
+
+function applyDetailPhotoTransform() {
+  detailPhoto.style.setProperty("--detail-zoom", String(detailPhotoZoom));
+  detailPhoto.style.setProperty("--detail-pan-x", `${Math.round(detailPhotoPan.x)}px`);
+  detailPhoto.style.setProperty("--detail-pan-y", `${Math.round(detailPhotoPan.y)}px`);
+  detailPhoto.classList.toggle("is-zoomed", detailPhotoZoom > 1.01);
+}
+
+function resetDetailPhotoZoom() {
+  detailPointers.clear();
+  detailPinchStart = null;
+  detailPhotoPanStart = null;
+  detailPhotoZoom = 1;
+  detailPhotoPan = { x: 0, y: 0 };
+  applyDetailPhotoTransform();
+}
+
+function beginDetailPhotoGesture(event) {
+  if (!selected || detail.classList.contains("has-video")) return;
+  event.preventDefault();
+  event.stopPropagation();
+  detailPhoto.setPointerCapture?.(event.pointerId);
+  detailPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+  if (detailPointers.size === 1) {
+    detailPhotoPanStart = {
+      pointerId: event.pointerId,
+      pointer: { x: event.clientX, y: event.clientY },
+      pan: { ...detailPhotoPan }
+    };
+    return;
+  }
+
+  if (detailPointers.size === 2) {
+    const values = [...detailPointers.values()];
+    detailPinchStart = {
+      distance: Math.max(1, Math.hypot(values[0].x - values[1].x, values[0].y - values[1].y)),
+      zoom: detailPhotoZoom,
+      pan: { ...detailPhotoPan },
+      center: { x: (values[0].x + values[1].x) / 2, y: (values[0].y + values[1].y) / 2 }
+    };
+    detailPhotoPanStart = null;
+  }
+}
+
+function updateDetailPhotoGesture(event) {
+  if (!detailPointers.has(event.pointerId)) return;
+  event.preventDefault();
+  event.stopPropagation();
+  detailPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+  if (detailPointers.size === 2 && detailPinchStart) {
+    const values = [...detailPointers.values()];
+    const distance = Math.max(1, Math.hypot(values[0].x - values[1].x, values[0].y - values[1].y));
+    const center = { x: (values[0].x + values[1].x) / 2, y: (values[0].y + values[1].y) / 2 };
+    detailPhotoZoom = clamp(detailPinchStart.zoom * (distance / detailPinchStart.distance), 1, 3);
+    detailPhotoPan = {
+      x: detailPinchStart.pan.x + center.x - detailPinchStart.center.x,
+      y: detailPinchStart.pan.y + center.y - detailPinchStart.center.y
+    };
+    applyDetailPhotoTransform();
+    return;
+  }
+
+  if (detailPointers.size === 1 && detailPhotoZoom > 1.01 && detailPhotoPanStart?.pointerId === event.pointerId) {
+    detailPhotoPan = {
+      x: detailPhotoPanStart.pan.x + event.clientX - detailPhotoPanStart.pointer.x,
+      y: detailPhotoPanStart.pan.y + event.clientY - detailPhotoPanStart.pointer.y
+    };
+    applyDetailPhotoTransform();
+  }
+}
+
+function endDetailPhotoGesture(event) {
+  if (!detailPointers.has(event.pointerId)) return;
+  event.preventDefault();
+  event.stopPropagation();
+  detailPhoto.releasePointerCapture?.(event.pointerId);
+  detailPointers.delete(event.pointerId);
+  detailPhotoPanStart = null;
+  detailPinchStart = null;
+
+  if (detailPointers.size === 1 && detailPhotoZoom > 1.01) {
+    const [remainingPointerId, point] = detailPointers.entries().next().value;
+    detailPhotoPanStart = { pointerId: remainingPointerId, pointer: { ...point }, pan: { ...detailPhotoPan } };
+  }
 }
 
 async function applyOriginalDetailPhotoRatio(photo, media) {
@@ -1599,6 +1698,7 @@ function openPhoto(photo) {
     mode
   };
   selected = photo;
+  resetDetailPhotoZoom();
   mode = "focus";
   document.body.classList.add("detail-open");
   opened.add(photo.id);
@@ -1635,6 +1735,7 @@ function stopDetailVideo() {
   detailVideo.removeAttribute("style");
   detailVideo.load();
   detail.classList.remove("has-video");
+  resetDetailPhotoZoom();
   resumeBackgroundMusicAfterVideo();
 }
 
@@ -1921,10 +2022,16 @@ document.querySelector("[data-fit]").addEventListener("click", () => {
 });
 
 detail.addEventListener("click", (event) => {
-  if (event.target === detail) {
-    closeDetail();
-  }
+  // The full-screen detail layer is intentionally the close target. Its direct
+  // media and text children keep their own click target, so they stay readable.
+  if (event.target === detail) closeDetail();
 });
+
+detailPhoto.addEventListener("pointerdown", beginDetailPhotoGesture);
+detailPhoto.addEventListener("pointermove", updateDetailPhotoGesture);
+detailPhoto.addEventListener("pointerup", endDetailPhotoGesture);
+detailPhoto.addEventListener("pointercancel", endDetailPhotoGesture);
+detailPhoto.addEventListener("lostpointercapture", endDetailPhotoGesture);
 
 detailVideoPlay.addEventListener("click", async (event) => {
   event.stopPropagation();
