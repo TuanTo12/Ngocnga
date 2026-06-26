@@ -7,7 +7,7 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
-const STATIC_PROJECT_VERSION = "ngocnga-mobile-fresh-20260622-1";
+const STATIC_PROJECT_VERSION = "ngocnga-current-20260626-2";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
@@ -31,6 +31,8 @@ const detail = document.querySelector("[data-detail]");
 const detailPhoto = document.querySelector("[data-detail-photo]");
 const detailVideo = document.querySelector("[data-detail-video]");
 const detailVideoPlay = document.querySelector("[data-video-play]");
+const detailPrev = document.querySelector("[data-detail-prev]");
+const detailNext = document.querySelector("[data-detail-next]");
 const detailDate = document.querySelector("[data-date]");
 const detailTitle = document.querySelector("[data-title]");
 const detailNote = document.querySelector("[data-note]");
@@ -61,9 +63,12 @@ let pinchStart = null;
 let gestureMoved = false;
 let returnViewBeforeFocus = null;
 let activeDetailVideoSrc = "";
+let activeDetailVideoSources = [];
+let activeDetailSlideIndex = 0;
 let audioPlaylist = [];
 let currentAudioIndex = 0;
 let backgroundMusicDesired = false;
+let pendingAutoplayUnlock = false;
 let shouldResumeMusicAfterVideo = false;
 let isMusicDuckedForVideo = false;
 let videoManifestFiles = null;
@@ -80,6 +85,9 @@ let detailPhotoZoom = 1;
 let detailPhotoPan = { x: 0, y: 0 };
 let detailPhotoPanStart = null;
 let detailPinchStart = null;
+let detailSwipeStart = null;
+let detailSwipeCancelled = false;
+let detailOpenedAt = 0;
 const projectChannel = "BroadcastChannel" in window ? new BroadcastChannel("fragments-of-nga-project") : null;
 
 const fallbackProject = {
@@ -200,24 +208,42 @@ function videoCandidatesForPhoto(photo, media) {
   ];
 }
 
-async function firstExistingVideo(candidates) {
+async function existingVideos(candidates) {
+  const videos = [];
+  const seen = new Set();
+
   for (const candidate of candidates) {
-    if (!candidate) continue;
-    if (candidate.startsWith("data:")) return candidate;
-    if (videoManifestFiles?.has(candidate.replace(/^\.\//, ""))) return candidate;
+    const normalized = String(candidate || "").replace(/^\.\//, "");
+    if (!candidate || seen.has(normalized)) continue;
+    seen.add(normalized);
+
+    if (candidate.startsWith("data:")) {
+      videos.push(candidate);
+      continue;
+    }
+
+    if (videoManifestFiles?.has(normalized)) {
+      videos.push(candidate);
+      continue;
+    }
+
     try {
       const response = await fetch(candidate, { method: "HEAD", cache: "no-store" });
-      if (response.ok) return candidate;
+      if (response.ok) {
+        videos.push(candidate);
+        continue;
+      }
     } catch {
       try {
         const fallback = await fetch(candidate, { cache: "no-store" });
-        if (fallback.ok) return candidate;
+        if (fallback.ok) videos.push(candidate);
       } catch {
         // Optional video files are allowed to be missing.
       }
     }
   }
-  return "";
+
+  return videos;
 }
 
 async function setupVideoManifest() {
@@ -233,13 +259,14 @@ async function setupVideoManifest() {
 
 async function prepareDetailVideo(photo, media) {
   activeDetailVideoSrc = "";
+  activeDetailVideoSources = [];
   detailVideoPlay.hidden = true;
   detailVideoPlay.disabled = true;
-  const videoSrc = await firstExistingVideo(videoCandidatesForPhoto(photo, media));
-  if (!selected || selected.id !== photo.id || !videoSrc) return;
-  activeDetailVideoSrc = videoSrc;
-  detailVideoPlay.hidden = false;
-  detailVideoPlay.disabled = false;
+  const videos = await existingVideos(videoCandidatesForPhoto(photo, media));
+  if (!selected || selected.id !== photo.id) return;
+  activeDetailVideoSources = videos;
+  activeDetailVideoSrc = videos[0] || "";
+  updateDetailSlideLabel();
 }
 
 function defaultPhotoLayout(number) {
@@ -263,8 +290,8 @@ function defaultPhotoLayout(number) {
 }
 
 async function init() {
-  setupAudioPlaylist();
-  setupVideoManifest();
+  await setupAudioPlaylist();
+  await setupVideoManifest();
   const storedProject = await loadProject();
   if (storedProject) {
     project = storedProject;
@@ -282,6 +309,7 @@ async function init() {
   renderAll({ persist: false });
   bindAdmin();
   startProjectSync();
+  requestBackgroundMusicAutoplay();
 }
 
 function normalizeProject() {
@@ -457,7 +485,19 @@ function hasServerProjectChanged(nextMeta) {
 
 function reconcileOpenDetail() {
   if (!selected) return;
-  selected = project.photos.find((photo) => photo.id === selected.id) || null;
+  const currentSelection = selected;
+  const nextSelection = project.photos.find((photo) => photo.id === currentSelection.id) || null;
+  if (nextSelection) {
+    selected = nextSelection;
+    return;
+  }
+
+  if (detail.classList.contains("open")) {
+    selected = currentSelection;
+    return;
+  }
+
+  selected = null;
   if (!selected) {
     mode = "entry";
   }
@@ -1607,9 +1647,99 @@ function resetDetailPhotoZoom() {
   detailPointers.clear();
   detailPinchStart = null;
   detailPhotoPanStart = null;
+  detailSwipeStart = null;
+  detailSwipeCancelled = false;
   detailPhotoZoom = 1;
   detailPhotoPan = { x: 0, y: 0 };
   applyDetailPhotoTransform();
+}
+
+function updateDetailSlideLabel() {
+  const totalSlides = 1 + activeDetailVideoSources.length;
+  detail.dataset.slideLabel = totalSlides > 1 ? `${activeDetailSlideIndex + 1} / ${totalSlides}` : "";
+  detail.dataset.canPrev = activeDetailSlideIndex > 0 ? "true" : "false";
+  detail.dataset.canNext = activeDetailSlideIndex < activeDetailVideoSources.length ? "true" : "false";
+}
+
+async function showDetailSlide(index) {
+  if (!selected) return;
+  const maxIndex = activeDetailVideoSources.length;
+  const nextIndex = clamp(index, 0, maxIndex);
+  if (nextIndex === activeDetailSlideIndex && (nextIndex === 0 || detail.classList.contains("has-video"))) return;
+
+  activeDetailSlideIndex = nextIndex;
+  updateDetailSlideLabel();
+
+  if (activeDetailSlideIndex === 0) {
+    stopCurrentDetailVideo();
+    detail.classList.remove("has-video");
+    activeDetailVideoSrc = activeDetailVideoSources[0] || "";
+    resetDetailPhotoZoom();
+    return;
+  }
+
+  resetDetailPhotoZoom();
+  activeDetailVideoSrc = activeDetailVideoSources[activeDetailSlideIndex - 1] || "";
+  if (!activeDetailVideoSrc) return;
+
+  detailVideo.controls = true;
+  detailVideo.muted = true;
+  detailVideo.playsInline = true;
+  if (detailVideo.getAttribute("src") !== activeDetailVideoSrc) {
+    detailVideo.src = activeDetailVideoSrc;
+  }
+  detail.classList.add("has-video");
+  shouldResumeMusicAfterVideo = false;
+  await duckBackgroundMusicForVideo();
+  try {
+    await detailVideo.play();
+  } catch {
+    restoreBackgroundMusicAfterVideo();
+  }
+}
+
+function switchDetailSlide(direction) {
+  if (!selected) return;
+  const nextIndex = activeDetailSlideIndex + direction;
+  if (nextIndex < 0 || nextIndex > activeDetailVideoSources.length) return;
+  showDetailSlide(nextIndex);
+}
+
+function beginDetailSwipe(event) {
+  if (!selected || detailPointers.size > 1) return;
+  detailSwipeCancelled = false;
+  detailSwipeStart = {
+    pointerId: event.pointerId,
+    x: event.clientX,
+    y: event.clientY
+  };
+}
+
+function updateDetailSwipe(event) {
+  if (!detailSwipeStart || detailSwipeStart.pointerId !== event.pointerId) return;
+  if (detailPointers.size > 1 || detailPhotoZoom > 1.01) {
+    detailSwipeCancelled = true;
+    return;
+  }
+
+  const dx = event.clientX - detailSwipeStart.x;
+  const dy = event.clientY - detailSwipeStart.y;
+  if (Math.abs(dy) > 48 && Math.abs(dy) > Math.abs(dx) * 1.2) detailSwipeCancelled = true;
+}
+
+function endDetailSwipe(event) {
+  if (!detailSwipeStart || detailSwipeStart.pointerId !== event.pointerId) return;
+  const start = detailSwipeStart;
+  detailSwipeStart = null;
+  if (detailSwipeCancelled || detailPhotoZoom > 1.01) {
+    detailSwipeCancelled = false;
+    return;
+  }
+
+  const dx = event.clientX - start.x;
+  const dy = event.clientY - start.y;
+  if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+  switchDetailSlide(dx < 0 ? 1 : -1);
 }
 
 function beginDetailPhotoGesture(event) {
@@ -1629,6 +1759,7 @@ function beginDetailPhotoGesture(event) {
   }
 
   if (detailPointers.size === 2) {
+    detailSwipeCancelled = true;
     const values = [...detailPointers.values()];
     detailPinchStart = {
       distance: Math.max(1, Math.hypot(values[0].x - values[1].x, values[0].y - values[1].y)),
@@ -1645,6 +1776,7 @@ function updateDetailPhotoGesture(event) {
   event.preventDefault();
   event.stopPropagation();
   detailPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+  updateDetailSwipe(event);
 
   if (detailPointers.size === 2 && detailPinchStart) {
     const values = [...detailPointers.values()];
@@ -1693,11 +1825,15 @@ async function applyOriginalDetailPhotoRatio(photo, media) {
 }
 
 function openPhoto(photo) {
+  detailOpenedAt = Date.now();
   returnViewBeforeFocus = {
     view: { ...view },
     mode
   };
   selected = photo;
+  activeDetailSlideIndex = 0;
+  activeDetailVideoSources = [];
+  activeDetailVideoSrc = "";
   resetDetailPhotoZoom();
   mode = "focus";
   document.body.classList.add("detail-open");
@@ -1716,7 +1852,7 @@ function openPhoto(photo) {
   detailVideo.removeAttribute("src");
   detailVideo.load();
   detail.classList.remove("has-video");
-  activeDetailVideoSrc = "";
+  updateDetailSlideLabel();
   detailVideoPlay.hidden = true;
   detailVideoPlay.disabled = true;
   prepareDetailVideo(photo, media);
@@ -1724,17 +1860,27 @@ function openPhoto(photo) {
   renderBoardTransform();
 }
 
-function stopDetailVideo() {
-  document.body.classList.remove("detail-open");
+function stopCurrentDetailVideo() {
   activeDetailVideoSrc = "";
-  detailVideoPlay.hidden = true;
-  detailVideoPlay.disabled = true;
   if (!detailVideo) return;
   detailVideo.pause();
   detailVideo.removeAttribute("src");
   detailVideo.removeAttribute("style");
+  detailVideo.muted = false;
   detailVideo.load();
+}
+
+function stopDetailVideo() {
+  document.body.classList.remove("detail-open");
+  activeDetailVideoSources = [];
+  activeDetailSlideIndex = 0;
+  detailSwipeStart = null;
+  detailSwipeCancelled = false;
+  detailVideoPlay.hidden = true;
+  detailVideoPlay.disabled = true;
+  stopCurrentDetailVideo();
   detail.classList.remove("has-video");
+  updateDetailSlideLabel();
   resetDetailPhotoZoom();
   resumeBackgroundMusicAfterVideo();
 }
@@ -1755,6 +1901,10 @@ function closeDetail({ restoreView = true } = {}) {
   returnViewBeforeFocus = null;
   mode = "entry";
   renderBoardTransform();
+}
+
+function canCloseDetailFromBackdrop() {
+  return Date.now() - detailOpenedAt > 700;
 }
 
 async function setupAudioPlaylist() {
@@ -1795,6 +1945,26 @@ function setAudioTrack(index, autoplay) {
   if (autoplay) playBackgroundMusic();
 }
 
+function requestBackgroundMusicAutoplay() {
+  if (!audio) return;
+  pendingAutoplayUnlock = true;
+  audio.autoplay = true;
+  playBackgroundMusic().then(() => {
+    if (!audio.paused) pendingAutoplayUnlock = false;
+  });
+}
+
+function unlockBackgroundMusicFromGesture() {
+  if (!pendingAutoplayUnlock || !audio || !backgroundMusicDesired || !audio.paused) {
+    if (audio && !audio.paused) pendingAutoplayUnlock = false;
+    return;
+  }
+
+  playBackgroundMusic().then(() => {
+    if (!audio.paused) pendingAutoplayUnlock = false;
+  });
+}
+
 function playNextAudioTrack() {
   if (!audioPlaylist.length) return;
   setAudioTrack(currentAudioIndex + 1, backgroundMusicDesired);
@@ -1808,13 +1978,17 @@ async function playBackgroundMusic() {
     await audio.play();
     updateMusicUi(true);
   } catch {
-    musicStatus.textContent = "tap để phát nền";
+    pendingAutoplayUnlock = true;
+    musicStatus.textContent = "chạm màn hình để phát nền";
   }
 }
 
 function pauseBackgroundMusic({ userRequested = false } = {}) {
   if (!audio) return;
-  if (userRequested) backgroundMusicDesired = false;
+  if (userRequested) {
+    backgroundMusicDesired = false;
+    pendingAutoplayUnlock = false;
+  }
   audio.pause();
   updateMusicUi(false);
 }
@@ -2024,8 +2198,26 @@ document.querySelector("[data-fit]").addEventListener("click", () => {
 detail.addEventListener("click", (event) => {
   // The full-screen detail layer is intentionally the close target. Its direct
   // media and text children keep their own click target, so they stay readable.
-  if (event.target === detail) closeDetail();
+  if (event.target === detail && canCloseDetailFromBackdrop()) closeDetail();
 });
+
+detailPrev?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  switchDetailSlide(-1);
+});
+
+detailNext?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  switchDetailSlide(1);
+});
+
+detail.addEventListener("pointerdown", beginDetailSwipe, { capture: true });
+detail.addEventListener("pointermove", updateDetailSwipe, { capture: true });
+detail.addEventListener("pointerup", endDetailSwipe, { capture: true });
+detail.addEventListener("pointercancel", () => {
+  detailSwipeStart = null;
+  detailSwipeCancelled = true;
+}, { capture: true });
 
 detailPhoto.addEventListener("pointerdown", beginDetailPhotoGesture);
 detailPhoto.addEventListener("pointermove", updateDetailPhotoGesture);
@@ -2035,18 +2227,7 @@ detailPhoto.addEventListener("lostpointercapture", endDetailPhotoGesture);
 
 detailVideoPlay.addEventListener("click", async (event) => {
   event.stopPropagation();
-  if (!activeDetailVideoSrc) return;
-  shouldResumeMusicAfterVideo = false;
-  await duckBackgroundMusicForVideo();
-  detailVideo.src = activeDetailVideoSrc;
-  detail.classList.add("has-video");
-  detailVideoPlay.hidden = true;
-  try {
-    await detailVideo.play();
-  } catch {
-    restoreBackgroundMusicAfterVideo();
-    detailVideo.controls = true;
-  }
+  if (activeDetailVideoSources.length) await showDetailSlide(1);
 });
 
 detailVideo.addEventListener("loadedmetadata", sizeDetailVideoToMetadata);
@@ -2080,6 +2261,12 @@ musicButton.addEventListener("click", async () => {
 
   await playBackgroundMusic();
 });
+
+document.addEventListener("pointerdown", unlockBackgroundMusicFromGesture, { capture: true });
+document.addEventListener("touchstart", unlockBackgroundMusicFromGesture, { capture: true, passive: true });
+document.addEventListener("touchend", unlockBackgroundMusicFromGesture, { capture: true, passive: true });
+document.addEventListener("click", unlockBackgroundMusicFromGesture, { capture: true });
+document.addEventListener("keydown", unlockBackgroundMusicFromGesture, { capture: true });
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
