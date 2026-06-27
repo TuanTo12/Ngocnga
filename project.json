@@ -437,15 +437,15 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p08",
-      "x": -396,
-      "y": 599,
+      "x": 352,
+      "y": 670,
       "w": 144,
       "h": 170,
       "rotation": 7,
-      "z": 485,
+      "z": 492,
       "mediaId": "folder-photo-8",
       "crop": "center",
-      "caption": "8",
+      "caption": "Run4Self",
       "photoNumber": 8,
       "baseW": 144,
       "baseH": 170,
@@ -570,12 +570,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p15",
-      "x": 960,
-      "y": 700,
+      "x": 1165,
+      "y": 699,
       "w": 180,
       "h": 144,
       "rotation": 7,
-      "z": 486,
+      "z": 494,
       "mediaId": "folder-photo-15",
       "crop": "center",
       "caption": "15",
@@ -746,11 +746,14 @@
       "w": 150,
       "h": 178,
       "rotation": -4,
-      "z": 22,
+      "z": 496,
       "mediaId": "folder-photo-24",
       "crop": "center",
       "caption": "village sunset",
-      "photoNumber": 24
+      "photoNumber": 24,
+      "baseW": 150,
+      "baseH": 178,
+      "scale": 100
     },
     {
       "detailNote": "",
@@ -1154,9 +1157,9 @@
       "w": 230,
       "h": 292,
       "rotation": 0,
-      "z": 402
+      "z": 495
     }
   ],
   "photoSourceVersion": "numbered-photo-folder-v1",
-  "updatedAt": "2026-06-27T02:21:54.172Z"
+  "updatedAt": "2026-06-27T05:56:49.294Z"
 }

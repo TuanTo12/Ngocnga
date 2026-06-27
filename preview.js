@@ -7,7 +7,7 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
-const STATIC_PROJECT_VERSION = "ngocnga-current-20260626-3";
+const STATIC_PROJECT_VERSION = "ngocnga-current-20260627-1";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
@@ -2109,7 +2109,7 @@ detailPhoto.addEventListener("lostpointercapture", endDetailPhotoGesture);
 detailVideoPlay.addEventListener("click", async (event) => {
   event.stopPropagation();
   if (!activeDetailVideoSrc) return;
-  shouldResumeMusicAfterVideo = false;
+  shouldResumeMusicAfterVideo = Boolean(audio && backgroundMusicDesired && !audio.paused);
   detailVideo.controls = true;
   detailVideo.muted = false;
   detailVideo.playsInline = true;
