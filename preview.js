@@ -7,7 +7,7 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
-const STATIC_PROJECT_VERSION = "ngocnga-current-20260626-2";
+const STATIC_PROJECT_VERSION = "ngocnga-current-20260626-3";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
@@ -31,8 +31,6 @@ const detail = document.querySelector("[data-detail]");
 const detailPhoto = document.querySelector("[data-detail-photo]");
 const detailVideo = document.querySelector("[data-detail-video]");
 const detailVideoPlay = document.querySelector("[data-video-play]");
-const detailPrev = document.querySelector("[data-detail-prev]");
-const detailNext = document.querySelector("[data-detail-next]");
 const detailDate = document.querySelector("[data-date]");
 const detailTitle = document.querySelector("[data-title]");
 const detailNote = document.querySelector("[data-note]");
@@ -63,8 +61,6 @@ let pinchStart = null;
 let gestureMoved = false;
 let returnViewBeforeFocus = null;
 let activeDetailVideoSrc = "";
-let activeDetailVideoSources = [];
-let activeDetailSlideIndex = 0;
 let audioPlaylist = [];
 let currentAudioIndex = 0;
 let backgroundMusicDesired = false;
@@ -85,8 +81,6 @@ let detailPhotoZoom = 1;
 let detailPhotoPan = { x: 0, y: 0 };
 let detailPhotoPanStart = null;
 let detailPinchStart = null;
-let detailSwipeStart = null;
-let detailSwipeCancelled = false;
 let detailOpenedAt = 0;
 const projectChannel = "BroadcastChannel" in window ? new BroadcastChannel("fragments-of-nga-project") : null;
 
@@ -259,14 +253,13 @@ async function setupVideoManifest() {
 
 async function prepareDetailVideo(photo, media) {
   activeDetailVideoSrc = "";
-  activeDetailVideoSources = [];
   detailVideoPlay.hidden = true;
   detailVideoPlay.disabled = true;
   const videos = await existingVideos(videoCandidatesForPhoto(photo, media));
   if (!selected || selected.id !== photo.id) return;
-  activeDetailVideoSources = videos;
   activeDetailVideoSrc = videos[0] || "";
-  updateDetailSlideLabel();
+  detailVideoPlay.hidden = !activeDetailVideoSrc;
+  detailVideoPlay.disabled = !activeDetailVideoSrc;
 }
 
 function defaultPhotoLayout(number) {
@@ -1647,99 +1640,13 @@ function resetDetailPhotoZoom() {
   detailPointers.clear();
   detailPinchStart = null;
   detailPhotoPanStart = null;
-  detailSwipeStart = null;
-  detailSwipeCancelled = false;
   detailPhotoZoom = 1;
   detailPhotoPan = { x: 0, y: 0 };
   applyDetailPhotoTransform();
 }
 
 function updateDetailSlideLabel() {
-  const totalSlides = 1 + activeDetailVideoSources.length;
-  detail.dataset.slideLabel = totalSlides > 1 ? `${activeDetailSlideIndex + 1} / ${totalSlides}` : "";
-  detail.dataset.canPrev = activeDetailSlideIndex > 0 ? "true" : "false";
-  detail.dataset.canNext = activeDetailSlideIndex < activeDetailVideoSources.length ? "true" : "false";
-}
-
-async function showDetailSlide(index) {
-  if (!selected) return;
-  const maxIndex = activeDetailVideoSources.length;
-  const nextIndex = clamp(index, 0, maxIndex);
-  if (nextIndex === activeDetailSlideIndex && (nextIndex === 0 || detail.classList.contains("has-video"))) return;
-
-  activeDetailSlideIndex = nextIndex;
-  updateDetailSlideLabel();
-
-  if (activeDetailSlideIndex === 0) {
-    stopCurrentDetailVideo();
-    detail.classList.remove("has-video");
-    activeDetailVideoSrc = activeDetailVideoSources[0] || "";
-    resetDetailPhotoZoom();
-    return;
-  }
-
-  resetDetailPhotoZoom();
-  activeDetailVideoSrc = activeDetailVideoSources[activeDetailSlideIndex - 1] || "";
-  if (!activeDetailVideoSrc) return;
-
-  detailVideo.controls = true;
-  detailVideo.muted = true;
-  detailVideo.playsInline = true;
-  if (detailVideo.getAttribute("src") !== activeDetailVideoSrc) {
-    detailVideo.src = activeDetailVideoSrc;
-  }
-  detail.classList.add("has-video");
-  shouldResumeMusicAfterVideo = false;
-  await duckBackgroundMusicForVideo();
-  try {
-    await detailVideo.play();
-  } catch {
-    restoreBackgroundMusicAfterVideo();
-  }
-}
-
-function switchDetailSlide(direction) {
-  if (!selected) return;
-  const nextIndex = activeDetailSlideIndex + direction;
-  if (nextIndex < 0 || nextIndex > activeDetailVideoSources.length) return;
-  showDetailSlide(nextIndex);
-}
-
-function beginDetailSwipe(event) {
-  if (!selected || detailPointers.size > 1) return;
-  detailSwipeCancelled = false;
-  detailSwipeStart = {
-    pointerId: event.pointerId,
-    x: event.clientX,
-    y: event.clientY
-  };
-}
-
-function updateDetailSwipe(event) {
-  if (!detailSwipeStart || detailSwipeStart.pointerId !== event.pointerId) return;
-  if (detailPointers.size > 1 || detailPhotoZoom > 1.01) {
-    detailSwipeCancelled = true;
-    return;
-  }
-
-  const dx = event.clientX - detailSwipeStart.x;
-  const dy = event.clientY - detailSwipeStart.y;
-  if (Math.abs(dy) > 48 && Math.abs(dy) > Math.abs(dx) * 1.2) detailSwipeCancelled = true;
-}
-
-function endDetailSwipe(event) {
-  if (!detailSwipeStart || detailSwipeStart.pointerId !== event.pointerId) return;
-  const start = detailSwipeStart;
-  detailSwipeStart = null;
-  if (detailSwipeCancelled || detailPhotoZoom > 1.01) {
-    detailSwipeCancelled = false;
-    return;
-  }
-
-  const dx = event.clientX - start.x;
-  const dy = event.clientY - start.y;
-  if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
-  switchDetailSlide(dx < 0 ? 1 : -1);
+  detail.dataset.slideLabel = "";
 }
 
 function beginDetailPhotoGesture(event) {
@@ -1759,7 +1666,6 @@ function beginDetailPhotoGesture(event) {
   }
 
   if (detailPointers.size === 2) {
-    detailSwipeCancelled = true;
     const values = [...detailPointers.values()];
     detailPinchStart = {
       distance: Math.max(1, Math.hypot(values[0].x - values[1].x, values[0].y - values[1].y)),
@@ -1776,7 +1682,6 @@ function updateDetailPhotoGesture(event) {
   event.preventDefault();
   event.stopPropagation();
   detailPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-  updateDetailSwipe(event);
 
   if (detailPointers.size === 2 && detailPinchStart) {
     const values = [...detailPointers.values()];
@@ -1831,8 +1736,6 @@ function openPhoto(photo) {
     mode
   };
   selected = photo;
-  activeDetailSlideIndex = 0;
-  activeDetailVideoSources = [];
   activeDetailVideoSrc = "";
   resetDetailPhotoZoom();
   mode = "focus";
@@ -1872,10 +1775,6 @@ function stopCurrentDetailVideo() {
 
 function stopDetailVideo() {
   document.body.classList.remove("detail-open");
-  activeDetailVideoSources = [];
-  activeDetailSlideIndex = 0;
-  detailSwipeStart = null;
-  detailSwipeCancelled = false;
   detailVideoPlay.hidden = true;
   detailVideoPlay.disabled = true;
   stopCurrentDetailVideo();
@@ -2201,24 +2100,6 @@ detail.addEventListener("click", (event) => {
   if (event.target === detail && canCloseDetailFromBackdrop()) closeDetail();
 });
 
-detailPrev?.addEventListener("click", (event) => {
-  event.stopPropagation();
-  switchDetailSlide(-1);
-});
-
-detailNext?.addEventListener("click", (event) => {
-  event.stopPropagation();
-  switchDetailSlide(1);
-});
-
-detail.addEventListener("pointerdown", beginDetailSwipe, { capture: true });
-detail.addEventListener("pointermove", updateDetailSwipe, { capture: true });
-detail.addEventListener("pointerup", endDetailSwipe, { capture: true });
-detail.addEventListener("pointercancel", () => {
-  detailSwipeStart = null;
-  detailSwipeCancelled = true;
-}, { capture: true });
-
 detailPhoto.addEventListener("pointerdown", beginDetailPhotoGesture);
 detailPhoto.addEventListener("pointermove", updateDetailPhotoGesture);
 detailPhoto.addEventListener("pointerup", endDetailPhotoGesture);
@@ -2227,7 +2108,23 @@ detailPhoto.addEventListener("lostpointercapture", endDetailPhotoGesture);
 
 detailVideoPlay.addEventListener("click", async (event) => {
   event.stopPropagation();
-  if (activeDetailVideoSources.length) await showDetailSlide(1);
+  if (!activeDetailVideoSrc) return;
+  shouldResumeMusicAfterVideo = false;
+  detailVideo.controls = true;
+  detailVideo.muted = false;
+  detailVideo.playsInline = true;
+  if (detailVideo.getAttribute("src") !== activeDetailVideoSrc) {
+    detailVideo.src = activeDetailVideoSrc;
+  }
+  detail.classList.add("has-video");
+  detailVideoPlay.hidden = true;
+  await duckBackgroundMusicForVideo();
+  try {
+    await detailVideo.play();
+  } catch {
+    restoreBackgroundMusicAfterVideo();
+    detailVideo.controls = true;
+  }
 });
 
 detailVideo.addEventListener("loadedmetadata", sizeDetailVideoToMetadata);
