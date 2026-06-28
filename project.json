@@ -1,5 +1,5 @@
 {
-  "title": "Fragments of Nga",
+  "title": "For Nga",
   "receiver": "Ngà",
   "birthdayText": "Hôm nay hãy vui nha.\nVà những ngày sau cũng vậy",
   "endingText": "",
@@ -55,247 +55,300 @@
       "type": "photo",
       "id": "folder-photo-1",
       "name": "Photo 1",
-      "src": "public/photos/1.jpg"
+      "src": "public/photos/1.jpg",
+      "thumbSrc": "public/thumbs/1.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-2",
       "name": "Photo 2",
-      "src": "public/photos/2.jpg"
+      "src": "public/photos/2.jpg",
+      "thumbSrc": "public/thumbs/2.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-3",
       "name": "Photo 3",
-      "src": "public/photos/3.jpg"
+      "src": "public/photos/3.jpg",
+      "thumbSrc": "public/thumbs/3.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-4",
       "name": "Photo 4",
-      "src": "public/photos/4.jpg"
+      "src": "public/photos/4.jpg",
+      "thumbSrc": "public/thumbs/4.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-5",
       "name": "Photo 5",
-      "src": "public/photos/5.jpg"
+      "src": "public/photos/5.jpg",
+      "thumbSrc": "public/thumbs/5.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-6",
       "name": "Photo 6",
-      "src": "public/photos/6.jpg"
+      "src": "public/photos/6.jpg",
+      "thumbSrc": "public/thumbs/6.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-7",
       "name": "Photo 7",
-      "src": "public/photos/7.jpg"
+      "src": "public/photos/7.jpg",
+      "thumbSrc": "public/thumbs/7.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-8",
       "name": "Photo 8",
-      "src": "public/photos/8.jpg"
+      "src": "public/photos/8.jpg",
+      "thumbSrc": "public/thumbs/8.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-9",
       "name": "Photo 9",
-      "src": "public/photos/9.jpg"
+      "src": "public/photos/9.jpg",
+      "thumbSrc": "public/thumbs/9.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-10",
       "name": "Photo 10",
-      "src": "public/photos/10.jpg"
+      "src": "public/photos/10.jpg",
+      "thumbSrc": "public/thumbs/10.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-11",
       "name": "Photo 11",
-      "src": "public/photos/11.jpg"
+      "src": "public/photos/11.jpg",
+      "thumbSrc": "public/thumbs/11.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-12",
       "name": "Photo 12",
-      "src": "public/photos/12.jpg"
+      "src": "public/photos/12.jpg",
+      "thumbSrc": "public/thumbs/12.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-13",
       "name": "Photo 13",
-      "src": "public/photos/13.jpg"
+      "src": "public/photos/13.jpg",
+      "thumbSrc": "public/thumbs/13.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-14",
       "name": "Photo 14",
-      "src": "public/photos/14.jpg"
+      "src": "public/photos/14.jpg",
+      "thumbSrc": "public/thumbs/14.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-15",
       "name": "Photo 15",
-      "src": "public/photos/15.jpg"
+      "src": "public/photos/15.jpg",
+      "thumbSrc": "public/thumbs/15.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-16",
       "name": "Photo 16",
-      "src": "public/photos/16.jpg"
+      "src": "public/photos/16.jpg",
+      "thumbSrc": "public/thumbs/16.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-17",
       "name": "Photo 17",
-      "src": "public/photos/17.jpg"
+      "src": "public/photos/17.jpg",
+      "thumbSrc": "public/thumbs/17.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-18",
       "name": "Photo 18",
-      "src": "public/photos/18.jpg"
+      "src": "public/photos/18.jpg",
+      "thumbSrc": "public/thumbs/18.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-19",
       "name": "Photo 19",
-      "src": "public/photos/19.jpg"
+      "src": "public/photos/19.jpg",
+      "thumbSrc": "public/thumbs/19.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-20",
       "name": "Photo 20",
-      "src": "public/photos/20.jpg"
+      "src": "public/photos/20.jpg",
+      "thumbSrc": "public/thumbs/20.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-21",
       "name": "Photo 21",
-      "src": "public/photos/21.jpg"
+      "src": "public/photos/21.jpg",
+      "thumbSrc": "public/thumbs/21.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-22",
       "name": "Photo 22",
-      "src": "public/photos/22.jpg"
+      "src": "public/photos/22.jpg",
+      "thumbSrc": "public/thumbs/22.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-23",
       "name": "Photo 23",
-      "src": "public/photos/23.jpg"
+      "src": "public/photos/23.jpg",
+      "thumbSrc": "public/thumbs/23.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-24",
       "name": "Photo 24",
-      "src": "public/photos/24.jpg"
+      "src": "public/photos/24.jpg",
+      "thumbSrc": "public/thumbs/24.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-25",
       "name": "Photo 25",
-      "src": "public/photos/25.jpg"
+      "src": "public/photos/25.jpg",
+      "thumbSrc": "public/thumbs/25.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-26",
       "name": "Photo 26",
-      "src": "public/photos/26.jpg"
+      "src": "public/photos/26.jpg",
+      "thumbSrc": "public/thumbs/26.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-27",
       "name": "Photo 27",
-      "src": "public/photos/27.jpg"
+      "src": "public/photos/27.jpg",
+      "thumbSrc": "public/thumbs/27.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-28",
       "name": "Photo 28",
-      "src": "public/photos/28.jpg"
+      "src": "public/photos/28.jpg",
+      "thumbSrc": "public/thumbs/28.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-29",
       "name": "Photo 29",
-      "src": "public/photos/29.jpg"
+      "src": "public/photos/29.jpg",
+      "thumbSrc": "public/thumbs/29.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-30",
       "name": "Photo 30",
-      "src": "public/photos/30.jpg"
+      "src": "public/photos/30.jpg",
+      "thumbSrc": "public/thumbs/30.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-31",
       "name": "Photo 31",
-      "src": "public/photos/31.jpg"
+      "src": "public/photos/31.jpg",
+      "thumbSrc": "public/thumbs/31.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-32",
       "name": "Photo 32",
-      "src": "public/photos/32.jpg"
+      "src": "public/photos/32.jpg",
+      "thumbSrc": "public/thumbs/32.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-33",
       "name": "Photo 33",
-      "src": "public/photos/33.jpg"
+      "src": "public/photos/33.jpg",
+      "thumbSrc": "public/thumbs/33.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-34",
       "name": "Photo 34",
-      "src": "public/photos/34.jpg"
+      "src": "public/photos/34.jpg",
+      "thumbSrc": "public/thumbs/34.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-35",
       "name": "Photo 35",
-      "src": "public/photos/35.jpg"
+      "src": "public/photos/35.jpg",
+      "thumbSrc": "public/thumbs/35.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-36",
       "name": "Photo 36",
-      "src": "public/photos/36.jpg"
+      "src": "public/photos/36.jpg",
+      "thumbSrc": "public/thumbs/36.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-37",
       "name": "Photo 37",
-      "src": "public/photos/37.jpg"
+      "src": "public/photos/37.jpg",
+      "thumbSrc": "public/thumbs/37.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-38",
       "name": "Photo 38",
-      "src": "public/photos/38.jpg"
+      "src": "public/photos/38.jpg",
+      "thumbSrc": "public/thumbs/38.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-39",
       "name": "Photo 39",
-      "src": "public/photos/39.jpg"
+      "src": "public/photos/39.jpg",
+      "thumbSrc": "public/thumbs/39.webp"
     },
     {
       "type": "photo",
       "id": "folder-photo-40",
       "name": "Photo 40",
-      "src": "public/photos/40.JPG"
+      "src": "public/photos/40.JPG",
+      "thumbSrc": "public/thumbs/40.webp"
     },
     {
       "type": "decoration",
       "id": "media-mqfyt1vj-epjmr",
       "name": "decor_1.png",
-      "src": "public/memories/decor_1.png"
+      "src": "public/optimized/decor_1.webp"
+    },
+    {
+      "type": "photo",
+      "id": "media-mqx6br4w-c1ib1",
+      "name": "27.jpg",
+      "src": "public/uploads/27-media-mqx6br4w-c1ib1.jpg"
+    },
+    {
+      "type": "photo",
+      "id": "media-mqx6di6y-dqser",
+      "name": "26.jpg",
+      "src": "public/uploads/26-media-mqx6di6y-dqser.jpg",
+      "thumbSrc": "public/thumbs/26-media-mqx6di6y-dqser.webp"
     }
   ],
   "photos": [
@@ -361,12 +414,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p04",
-      "x": 65,
+      "x": 42,
       "y": 200,
       "w": 184,
       "h": 150,
       "rotation": -6,
-      "z": 236,
+      "z": 670,
       "mediaId": "folder-photo-4",
       "crop": "center",
       "caption": "Năng lượng",
@@ -380,12 +433,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p05",
-      "x": 265,
-      "y": 188,
+      "x": 255,
+      "y": 191,
       "w": 150,
       "h": 184,
       "rotation": 5,
-      "z": 225,
+      "z": 667,
       "mediaId": "folder-photo-5",
       "crop": "center",
       "caption": "Đã chơi là hết mìnhhhh",
@@ -438,11 +491,11 @@
       "videoName": "",
       "id": "p08",
       "x": 352,
-      "y": 670,
+      "y": 664,
       "w": 144,
       "h": 170,
       "rotation": 7,
-      "z": 492,
+      "z": 674,
       "mediaId": "folder-photo-8",
       "crop": "center",
       "caption": "Run4Self",
@@ -456,12 +509,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p09",
-      "x": 233,
-      "y": 361,
+      "x": 237,
+      "y": 365,
       "w": 154,
       "h": 188,
       "rotation": -4,
-      "z": 226,
+      "z": 671,
       "mediaId": "folder-photo-9",
       "crop": "center",
       "caption": "Cơn mưa thanh xuân",
@@ -480,7 +533,7 @@
       "w": 190,
       "h": 154,
       "rotation": 5,
-      "z": 475,
+      "z": 673,
       "mediaId": "folder-photo-10",
       "crop": "center",
       "caption": "Chúc tất cả các bạn mang dòng máu Việt luôn mạnh khỏe và tràn đầy năng lượng.",
@@ -494,15 +547,15 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p11",
-      "x": 631,
-      "y": 872,
+      "x": 644,
+      "y": 880,
       "w": 146,
       "h": 176,
       "rotation": -5,
-      "z": 480,
+      "z": 664,
       "mediaId": "folder-photo-11",
       "crop": "center",
-      "caption": "11",
+      "caption": "Nắng và hoa",
       "photoNumber": 11,
       "baseW": 146,
       "baseH": 176,
@@ -513,15 +566,15 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p12",
-      "x": 65,
-      "y": 521,
+      "x": 55,
+      "y": 526,
       "w": 166,
       "h": 144,
       "rotation": -8,
-      "z": 449,
+      "z": 618,
       "mediaId": "folder-photo-12",
       "crop": "center",
-      "caption": "12",
+      "caption": "",
       "photoNumber": 12,
       "baseW": 166,
       "baseH": 144,
@@ -537,10 +590,10 @@
       "w": 164,
       "h": 182,
       "rotation": 4,
-      "z": 450,
+      "z": 672,
       "mediaId": "folder-photo-13",
       "crop": "center",
-      "caption": "Chúc mừng sinh nhật",
+      "caption": "🎂🎉",
       "photoNumber": 13,
       "baseW": 164,
       "baseH": 182,
@@ -551,12 +604,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p14",
-      "x": 91,
-      "y": 346,
+      "x": 88,
+      "y": 350,
       "w": 150,
       "h": 176,
       "rotation": -2,
-      "z": 448,
+      "z": 669,
       "mediaId": "folder-photo-14",
       "crop": "center",
       "caption": "Những năm tháng đẹp",
@@ -570,15 +623,15 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p15",
-      "x": 1165,
-      "y": 699,
-      "w": 180,
-      "h": 144,
+      "x": 499,
+      "y": 712,
+      "w": 139,
+      "h": 176,
       "rotation": 7,
-      "z": 494,
+      "z": 589,
       "mediaId": "folder-photo-15",
       "crop": "center",
-      "caption": "15",
+      "caption": "Sắc thái hoàng hôn mỗi ngày",
       "photoNumber": 15,
       "baseW": 180,
       "baseH": 144,
@@ -589,12 +642,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p16",
-      "x": 62,
-      "y": 693,
+      "x": 66,
+      "y": 683,
       "w": 147,
       "h": 182,
       "rotation": 5,
-      "z": 406,
+      "z": 675,
       "mediaId": "folder-photo-16",
       "crop": "center",
       "caption": "Ngay giữa lòng thành Hà Nội",
@@ -665,12 +718,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p20",
-      "x": 336,
-      "y": 853,
+      "x": 454,
+      "y": 885,
       "w": 188,
       "h": 150,
       "rotation": 4,
-      "z": 441,
+      "z": 677,
       "mediaId": "folder-photo-20",
       "crop": "center",
       "caption": "Mùa em co vy ghé chơi",
@@ -684,12 +737,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p21",
-      "x": 482,
-      "y": 987,
+      "x": 489,
+      "y": 1033,
       "w": 147,
       "h": 178,
       "rotation": -6,
-      "z": 420,
+      "z": 636,
       "mediaId": "folder-photo-21",
       "crop": "center",
       "caption": "Góc nhỏ ít ai biét 😉",
@@ -703,12 +756,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p22",
-      "x": 548,
-      "y": 530,
-      "w": 131,
-      "h": 178,
+      "x": 539,
+      "y": 538,
+      "w": 133,
+      "h": 183,
       "rotation": 5,
-      "z": 481,
+      "z": 587,
       "mediaId": "folder-photo-22",
       "crop": "center",
       "caption": "waoo, bướm này...",
@@ -722,12 +775,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p23",
-      "x": 648,
-      "y": 707,
+      "x": 639,
+      "y": 713,
       "w": 148,
       "h": 172,
       "rotation": -7,
-      "z": 479,
+      "z": 575,
       "mediaId": "folder-photo-23",
       "crop": "center",
       "caption": "Một trong những lý do tới Huế",
@@ -779,15 +832,15 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p26",
-      "x": 344,
-      "y": 1010,
+      "x": 101,
+      "y": 862,
       "w": 144,
       "h": 183,
       "rotation": -3,
-      "z": 426,
+      "z": 651,
       "mediaId": "folder-photo-26",
       "crop": "center",
-      "caption": "Tận hưởng màu trời biển xứ Nghệ",
+      "caption": "Thu Hà Nội - 1 trong những mùa đẹp nhất thủ đô",
       "photoNumber": 26,
       "baseW": 146,
       "baseH": 174,
@@ -797,19 +850,19 @@
       "detailNote": "",
       "videoSrc": "",
       "videoName": "",
-      "id": "p27",
-      "x": 122,
-      "y": 874,
-      "w": 148,
-      "h": 178,
-      "rotation": 5,
-      "z": 438,
+      "id": "p28",
+      "x": 325,
+      "y": 832,
+      "w": 146,
+      "h": 187,
+      "rotation": 7,
+      "z": 676,
       "mediaId": "folder-photo-27",
       "crop": "center",
-      "caption": "Gió",
+      "caption": "Moon",
       "photoNumber": 27,
-      "baseW": 148,
-      "baseH": 178,
+      "baseW": 176,
+      "baseH": 142,
       "scale": 100
     },
     {
@@ -817,15 +870,15 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p28",
-      "x": 624,
-      "y": 1045,
+      "x": 633,
+      "y": 1054,
       "w": 156,
       "h": 141,
       "rotation": 7,
-      "z": 457,
+      "z": 568,
       "mediaId": "folder-photo-28",
       "crop": "center",
-      "caption": "Chill có gu",
+      "caption": "Chill",
       "photoNumber": 28,
       "baseW": 176,
       "baseH": 142,
@@ -893,12 +946,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p32",
-      "x": 482,
-      "y": 1163,
+      "x": 487,
+      "y": 1196,
       "w": 152,
       "h": 172,
       "rotation": -3,
-      "z": 165,
+      "z": 630,
       "mediaId": "folder-photo-32",
       "crop": "center",
       "caption": "Bống - Bon - Chip…",
@@ -959,7 +1012,7 @@
       "photoNumber": 35,
       "mediaId": "folder-photo-35",
       "crop": "center",
-      "caption": "Ngầu dzữ",
+      "caption": "Ngầu chưaa",
       "baseW": 152,
       "baseH": 178,
       "scale": 100
@@ -974,7 +1027,7 @@
       "w": 150,
       "h": 178,
       "rotation": -5,
-      "z": 162,
+      "z": 627,
       "photoNumber": 36,
       "mediaId": "folder-photo-36",
       "crop": "center",
@@ -1007,12 +1060,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "photo-38",
-      "x": 472,
-      "y": 1353,
+      "x": 484,
+      "y": 1364,
       "w": 154,
       "h": 184,
       "rotation": -3,
-      "z": 141,
+      "z": 631,
       "photoNumber": 38,
       "mediaId": "folder-photo-38",
       "crop": "center",
@@ -1026,12 +1079,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "photo-39",
-      "x": 223,
-      "y": 1538,
+      "x": 209,
+      "y": 1557,
       "w": 160,
       "h": 172,
       "rotation": 5,
-      "z": 126,
+      "z": 633,
       "photoNumber": 39,
       "mediaId": "folder-photo-39",
       "crop": "center",
@@ -1045,61 +1098,60 @@
       "videoSrc": "",
       "videoName": "",
       "id": "photo-40",
-      "x": 405,
-      "y": 1526,
+      "x": 375,
+      "y": 1545,
       "w": 174,
       "h": 142,
       "rotation": -4,
-      "z": 27,
+      "z": 632,
       "photoNumber": 40,
       "mediaId": "folder-photo-40",
       "crop": "center",
-      "caption": ""
+      "caption": "",
+      "baseW": 174,
+      "baseH": 142,
+      "scale": 100
+    },
+    {
+      "detailNote": "",
+      "videoSrc": "",
+      "videoName": "",
+      "id": "photo-mqx6abi2-dmynx",
+      "mediaId": "media-mqx6di6y-dqser",
+      "crop": "center",
+      "caption": "Tận hưởng màu trời biển xứ Nghệ",
+      "x": 344,
+      "y": 1030,
+      "w": 153,
+      "h": 189,
+      "rotation": -3,
+      "z": 642,
+      "baseW": 160,
+      "baseH": 180,
+      "scale": 100
     }
   ],
   "notes": [
     {
-      "id": "n01",
-      "text": "Hành trình tận hưởng cuộc sống",
-      "x": -310,
-      "y": 341,
-      "w": 132,
-      "h": 100,
-      "rotation": -3,
-      "z": 446,
-      "color": "#d8bd8d"
-    },
-    {
       "id": "n02",
       "text": "Family ❤️",
-      "x": 333,
-      "y": 1404,
+      "x": 343,
+      "y": 1425,
       "w": 132,
       "h": 100,
       "rotation": -4,
-      "z": 345,
-      "color": "#d8bd8d"
-    },
-    {
-      "id": "n03",
-      "text": "hôm đó em rất vui",
-      "x": 1114,
-      "y": 311,
-      "w": 132,
-      "h": 100,
-      "rotation": -2,
-      "z": 464,
+      "z": 678,
       "color": "#d8bd8d"
     },
     {
       "id": "n04",
       "text": "Bình yên",
-      "x": 237,
-      "y": 954,
+      "x": 226,
+      "y": 958,
       "w": 132,
       "h": 100,
       "rotation": 3,
-      "z": 440,
+      "z": 661,
       "color": "#d8bd8d"
     },
     {
@@ -1152,14 +1204,14 @@
       "mediaId": "media-mqfyt1vj-epjmr",
       "id": "decor-mqfyt1vx-b67x2",
       "type": "image",
-      "x": -37,
-      "y": 803,
-      "w": 230,
-      "h": 292,
+      "x": -20,
+      "y": 814,
+      "w": 151,
+      "h": 198,
       "rotation": 0,
-      "z": 495
+      "z": 680
     }
   ],
   "photoSourceVersion": "numbered-photo-folder-v1",
-  "updatedAt": "2026-06-27T05:56:49.294Z"
+  "updatedAt": "2026-06-28T03:12:44.607Z"
 }

@@ -7,7 +7,7 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
-const STATIC_PROJECT_VERSION = "ngocnga-current-20260627-1";
+const STATIC_PROJECT_VERSION = "ngocnga-current-20260628-1";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
@@ -865,7 +865,8 @@ function renderPhoto(photo) {
   const caption = photo.caption || "";
   button.style.setProperty("--photo-w", Number(photo.w || 150));
   button.innerHTML = `<span class="tape top"></span><span class="photo-img"></span><span class="caption"></span>`;
-  button.querySelector(".photo-img").style.backgroundImage = `linear-gradient(rgba(255,232,176,.04), rgba(84,46,19,.12)), ${imageCssSources(media.src)}`;
+  const boardImageSrc = media.thumbSrc || media.src;
+  button.querySelector(".photo-img").style.backgroundImage = `linear-gradient(rgba(255,232,176,.04), rgba(84,46,19,.12)), ${imageCssSources(boardImageSrc)}`;
   button.querySelector(".photo-img").style.backgroundPosition = photo.crop || "center";
   button.querySelector(".photo-img").style.backgroundSize = media.src.startsWith("data:") || media.src.includes("public/photos/") ? "cover" : "400% 300%";
   button.querySelector(".caption").textContent = caption;
