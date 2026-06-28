@@ -55,287 +55,247 @@
       "type": "photo",
       "id": "folder-photo-1",
       "name": "Photo 1",
-      "src": "public/photos/1.jpg",
-      "thumbSrc": "public/thumbs/1.webp"
+      "src": "public/photos/1.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-2",
       "name": "Photo 2",
-      "src": "public/photos/2.jpg",
-      "thumbSrc": "public/thumbs/2.webp"
+      "src": "public/photos/2.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-3",
       "name": "Photo 3",
-      "src": "public/photos/3.jpg",
-      "thumbSrc": "public/thumbs/3.webp"
+      "src": "public/photos/3.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-4",
       "name": "Photo 4",
-      "src": "public/photos/4.jpg",
-      "thumbSrc": "public/thumbs/4.webp"
+      "src": "public/photos/4.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-5",
       "name": "Photo 5",
-      "src": "public/photos/5.jpg",
-      "thumbSrc": "public/thumbs/5.webp"
+      "src": "public/photos/5.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-6",
       "name": "Photo 6",
-      "src": "public/photos/6.jpg",
-      "thumbSrc": "public/thumbs/6.webp"
+      "src": "public/photos/6.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-7",
       "name": "Photo 7",
-      "src": "public/photos/7.jpg",
-      "thumbSrc": "public/thumbs/7.webp"
+      "src": "public/photos/7.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-8",
       "name": "Photo 8",
-      "src": "public/photos/8.jpg",
-      "thumbSrc": "public/thumbs/8.webp"
+      "src": "public/photos/8.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-9",
       "name": "Photo 9",
-      "src": "public/photos/9.jpg",
-      "thumbSrc": "public/thumbs/9.webp"
+      "src": "public/photos/9.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-10",
       "name": "Photo 10",
-      "src": "public/photos/10.jpg",
-      "thumbSrc": "public/thumbs/10.webp"
+      "src": "public/photos/10.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-11",
       "name": "Photo 11",
-      "src": "public/photos/11.jpg",
-      "thumbSrc": "public/thumbs/11.webp"
+      "src": "public/photos/11.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-12",
       "name": "Photo 12",
-      "src": "public/photos/12.jpg",
-      "thumbSrc": "public/thumbs/12.webp"
+      "src": "public/photos/12.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-13",
       "name": "Photo 13",
-      "src": "public/photos/13.jpg",
-      "thumbSrc": "public/thumbs/13.webp"
+      "src": "public/photos/13.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-14",
       "name": "Photo 14",
-      "src": "public/photos/14.jpg",
-      "thumbSrc": "public/thumbs/14.webp"
+      "src": "public/photos/14.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-15",
       "name": "Photo 15",
-      "src": "public/photos/15.jpg",
-      "thumbSrc": "public/thumbs/15.webp"
+      "src": "public/photos/15.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-16",
       "name": "Photo 16",
-      "src": "public/photos/16.jpg",
-      "thumbSrc": "public/thumbs/16.webp"
+      "src": "public/photos/16.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-17",
       "name": "Photo 17",
-      "src": "public/photos/17.jpg",
-      "thumbSrc": "public/thumbs/17.webp"
+      "src": "public/photos/17.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-18",
       "name": "Photo 18",
-      "src": "public/photos/18.jpg",
-      "thumbSrc": "public/thumbs/18.webp"
+      "src": "public/photos/18.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-19",
       "name": "Photo 19",
-      "src": "public/photos/19.jpg",
-      "thumbSrc": "public/thumbs/19.webp"
+      "src": "public/photos/19.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-20",
       "name": "Photo 20",
-      "src": "public/photos/20.jpg",
-      "thumbSrc": "public/thumbs/20.webp"
+      "src": "public/photos/20.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-21",
       "name": "Photo 21",
-      "src": "public/photos/21.jpg",
-      "thumbSrc": "public/thumbs/21.webp"
+      "src": "public/photos/21.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-22",
       "name": "Photo 22",
-      "src": "public/photos/22.jpg",
-      "thumbSrc": "public/thumbs/22.webp"
+      "src": "public/photos/22.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-23",
       "name": "Photo 23",
-      "src": "public/photos/23.jpg",
-      "thumbSrc": "public/thumbs/23.webp"
+      "src": "public/photos/23.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-24",
       "name": "Photo 24",
-      "src": "public/photos/24.jpg",
-      "thumbSrc": "public/thumbs/24.webp"
+      "src": "public/photos/24.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-25",
       "name": "Photo 25",
-      "src": "public/photos/25.jpg",
-      "thumbSrc": "public/thumbs/25.webp"
+      "src": "public/photos/25.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-26",
       "name": "Photo 26",
-      "src": "public/photos/26.jpg",
-      "thumbSrc": "public/thumbs/26.webp"
+      "src": "public/photos/26.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-27",
       "name": "Photo 27",
-      "src": "public/photos/27.jpg",
-      "thumbSrc": "public/thumbs/27.webp"
+      "src": "public/photos/27.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-28",
       "name": "Photo 28",
-      "src": "public/photos/28.jpg",
-      "thumbSrc": "public/thumbs/28.webp"
+      "src": "public/photos/28.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-29",
       "name": "Photo 29",
-      "src": "public/photos/29.jpg",
-      "thumbSrc": "public/thumbs/29.webp"
+      "src": "public/photos/29.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-30",
       "name": "Photo 30",
-      "src": "public/photos/30.jpg",
-      "thumbSrc": "public/thumbs/30.webp"
+      "src": "public/photos/30.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-31",
       "name": "Photo 31",
-      "src": "public/photos/31.jpg",
-      "thumbSrc": "public/thumbs/31.webp"
+      "src": "public/photos/31.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-32",
       "name": "Photo 32",
-      "src": "public/photos/32.jpg",
-      "thumbSrc": "public/thumbs/32.webp"
+      "src": "public/photos/32.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-33",
       "name": "Photo 33",
-      "src": "public/photos/33.jpg",
-      "thumbSrc": "public/thumbs/33.webp"
+      "src": "public/photos/33.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-34",
       "name": "Photo 34",
-      "src": "public/photos/34.jpg",
-      "thumbSrc": "public/thumbs/34.webp"
+      "src": "public/photos/34.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-35",
       "name": "Photo 35",
-      "src": "public/photos/35.jpg",
-      "thumbSrc": "public/thumbs/35.webp"
+      "src": "public/photos/35.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-36",
       "name": "Photo 36",
-      "src": "public/photos/36.jpg",
-      "thumbSrc": "public/thumbs/36.webp"
+      "src": "public/photos/36.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-37",
       "name": "Photo 37",
-      "src": "public/photos/37.jpg",
-      "thumbSrc": "public/thumbs/37.webp"
+      "src": "public/photos/37.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-38",
       "name": "Photo 38",
-      "src": "public/photos/38.jpg",
-      "thumbSrc": "public/thumbs/38.webp"
+      "src": "public/photos/38.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-39",
       "name": "Photo 39",
-      "src": "public/photos/39.jpg",
-      "thumbSrc": "public/thumbs/39.webp"
+      "src": "public/photos/39.jpg"
     },
     {
       "type": "photo",
       "id": "folder-photo-40",
       "name": "Photo 40",
-      "src": "public/photos/40.JPG",
-      "thumbSrc": "public/thumbs/40.webp"
+      "src": "public/photos/40.JPG"
     },
     {
       "type": "decoration",
       "id": "media-mqfyt1vj-epjmr",
       "name": "decor_1.png",
-      "src": "public/optimized/decor_1.webp"
+      "src": "public/memories/decor_1.png"
     },
     {
       "type": "photo",
@@ -347,8 +307,7 @@
       "type": "photo",
       "id": "media-mqx6di6y-dqser",
       "name": "26.jpg",
-      "src": "public/uploads/26-media-mqx6di6y-dqser.jpg",
-      "thumbSrc": "public/thumbs/26-media-mqx6di6y-dqser.webp"
+      "src": "public/uploads/26-media-mqx6di6y-dqser.jpg"
     }
   ],
   "photos": [
@@ -780,10 +739,10 @@
       "w": 148,
       "h": 172,
       "rotation": -7,
-      "z": 575,
+      "z": 685,
       "mediaId": "folder-photo-23",
       "crop": "center",
-      "caption": "Một trong những lý do tới Huế",
+      "caption": "Những lý do tới Huế",
       "photoNumber": 23,
       "baseW": 142,
       "baseH": 168,
@@ -851,12 +810,12 @@
       "videoSrc": "",
       "videoName": "",
       "id": "p28",
-      "x": 325,
-      "y": 832,
+      "x": 335,
+      "y": 831,
       "w": 146,
       "h": 187,
       "rotation": 7,
-      "z": 676,
+      "z": 683,
       "mediaId": "folder-photo-27",
       "crop": "center",
       "caption": "Moon",
@@ -1146,12 +1105,12 @@
     {
       "id": "n04",
       "text": "Bình yên",
-      "x": 226,
-      "y": 958,
+      "x": 202,
+      "y": 965,
       "w": 132,
       "h": 100,
       "rotation": 3,
-      "z": 661,
+      "z": 684,
       "color": "#d8bd8d"
     },
     {
@@ -1213,5 +1172,5 @@
     }
   ],
   "photoSourceVersion": "numbered-photo-folder-v1",
-  "updatedAt": "2026-06-28T03:12:44.607Z"
+  "updatedAt": "2026-06-28T08:46:54.074Z"
 }

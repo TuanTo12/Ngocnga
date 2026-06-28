@@ -7,11 +7,12 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
-const STATIC_PROJECT_VERSION = "ngocnga-current-20260628-1";
+const STATIC_PROJECT_VERSION = "ngocnga-current-20260628-4";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
 const VIDEO_DUCK_GAIN = 10 ** (-5 / 20);
+const MAX_BOARD_ZOOM = 12;
 const isAdminMode = new URLSearchParams(location.search).has("admin");
 const hasCmsServer = () => {
   const host = location.hostname;
@@ -151,6 +152,10 @@ function imageCssSources(src) {
   return `url("${src}")`;
 }
 
+function isRealPhotoSource(src) {
+  return Boolean(src) && !String(src).includes("light-contact-sheet");
+}
+
 function imageSourceCandidates(src) {
   if (!src || src.startsWith("data:")) return src ? [src] : [];
   const match = String(src).match(/^public\/photos\/(\d+)\.(png|jpe?g|webp)$/i);
@@ -200,6 +205,22 @@ function videoCandidatesForPhoto(photo, media) {
     ...VIDEO_EXTENSIONS.map((extension) => `${base}.${extension}`),
     ...VIDEO_EXTENSIONS.map((extension) => `public/videos/${name}.${extension}`)
   ];
+}
+
+function knownVideoFromManifest(candidates) {
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    if (candidate.startsWith("data:")) return candidate;
+    const normalized = String(candidate).replace(/^\.\//, "");
+    if (videoManifestFiles?.has(normalized)) return candidate;
+  }
+  return "";
+}
+
+function setDetailVideoButton(src) {
+  activeDetailVideoSrc = src || "";
+  detailVideoPlay.hidden = !activeDetailVideoSrc;
+  detailVideoPlay.disabled = !activeDetailVideoSrc;
 }
 
 async function existingVideos(candidates) {
@@ -252,14 +273,11 @@ async function setupVideoManifest() {
 }
 
 async function prepareDetailVideo(photo, media) {
-  activeDetailVideoSrc = "";
-  detailVideoPlay.hidden = true;
-  detailVideoPlay.disabled = true;
-  const videos = await existingVideos(videoCandidatesForPhoto(photo, media));
+  const candidates = videoCandidatesForPhoto(photo, media);
+  setDetailVideoButton(knownVideoFromManifest(candidates));
+  const videos = await existingVideos(candidates);
   if (!selected || selected.id !== photo.id) return;
-  activeDetailVideoSrc = videos[0] || "";
-  detailVideoPlay.hidden = !activeDetailVideoSrc;
-  detailVideoPlay.disabled = !activeDetailVideoSrc;
+  setDetailVideoButton(videos[0] || activeDetailVideoSrc);
 }
 
 function defaultPhotoLayout(number) {
@@ -865,10 +883,10 @@ function renderPhoto(photo) {
   const caption = photo.caption || "";
   button.style.setProperty("--photo-w", Number(photo.w || 150));
   button.innerHTML = `<span class="tape top"></span><span class="photo-img"></span><span class="caption"></span>`;
-  const boardImageSrc = media.thumbSrc || media.src;
+  const boardImageSrc = media.src;
   button.querySelector(".photo-img").style.backgroundImage = `linear-gradient(rgba(255,232,176,.04), rgba(84,46,19,.12)), ${imageCssSources(boardImageSrc)}`;
   button.querySelector(".photo-img").style.backgroundPosition = photo.crop || "center";
-  button.querySelector(".photo-img").style.backgroundSize = media.src.startsWith("data:") || media.src.includes("public/photos/") ? "cover" : "400% 300%";
+  button.querySelector(".photo-img").style.backgroundSize = isRealPhotoSource(boardImageSrc) ? "cover" : "400% 300%";
   button.querySelector(".caption").textContent = caption;
   addEditorHandles(button, photo);
   bindBoardItem(button, photo);
@@ -1748,7 +1766,7 @@ function openPhoto(photo) {
   detailPhoto.style.setProperty("--detail-src", imageCssSources(media.src));
   detailPhoto.style.setProperty("--crop", photo.crop || "center");
   setDetailPhotoRatio(imageAreaWidth, imageAreaHeight);
-  detailPhoto.style.setProperty("--detail-size", media.src?.startsWith("data:") || media.src?.includes("public/photos/") ? "contain" : "400% 300%");
+  detailPhoto.style.setProperty("--detail-size", isRealPhotoSource(media.src) ? "contain" : "400% 300%");
   applyOriginalDetailPhotoRatio(photo, media);
   detailTitle.textContent = photo.caption || "";
   detailNote.textContent = photo.detailNote || "";
@@ -1757,8 +1775,7 @@ function openPhoto(photo) {
   detailVideo.load();
   detail.classList.remove("has-video");
   updateDetailSlideLabel();
-  detailVideoPlay.hidden = true;
-  detailVideoPlay.disabled = true;
+  setDetailVideoButton(knownVideoFromManifest(videoCandidatesForPhoto(photo, media)));
   prepareDetailVideo(photo, media);
   detail.classList.add("open");
   renderBoardTransform();
@@ -1987,6 +2004,16 @@ function applyView({ focused = false } = {}) {
   board.style.transform = `translate(-50%, -50%) translate(${view.x}px, ${view.y}px) scale(${view.scale})`;
 }
 
+function zoomViewerAt(clientX, clientY, nextScale) {
+  const clampedScale = clamp(nextScale, overviewScale() * 0.5, MAX_BOARD_ZOOM);
+  const ratio = clampedScale / view.scale;
+  view.x = clientX - innerWidth / 2 - (clientX - innerWidth / 2 - view.x) * ratio;
+  view.y = clientY - innerHeight / 2 - (clientY - innerHeight / 2 - view.y) * ratio;
+  view.scale = clampedScale;
+  mode = "manual";
+  applyView();
+}
+
 function beginViewerGesture(event) {
   if (isAdminMode || selected) return;
   pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
@@ -2016,8 +2043,8 @@ function updateViewerGesture(event) {
     const values = [...pointers.values()];
     const nextScale = clamp(
       pinchStart.view.scale * (Math.hypot(values[0].x - values[1].x, values[0].y - values[1].y) / pinchStart.distance),
-      overviewScale() * 0.84,
-      1.55
+      overviewScale() * 0.5,
+      MAX_BOARD_ZOOM
     );
     const ratio = nextScale / pinchStart.view.scale;
     view.scale = nextScale;
@@ -2080,6 +2107,12 @@ board.addEventListener("pointermove", (event) => {
 
 board.addEventListener("pointerup", endViewerGesture);
 board.addEventListener("pointercancel", endViewerGesture);
+board.addEventListener("wheel", (event) => {
+  if (isAdminMode || selected) return;
+  event.preventDefault();
+  const zoomFactor = Math.exp(-event.deltaY * 0.0015);
+  zoomViewerAt(event.clientX, event.clientY, view.scale * zoomFactor);
+}, { passive: false });
 
 document.querySelector("[data-close]").addEventListener("click", () => {
   closeDetail();
