@@ -7,7 +7,7 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
-const STATIC_PROJECT_VERSION = "ngocnga-current-20260628-4";
+const STATIC_PROJECT_VERSION = "ngocnga-current-20260628-5";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
@@ -840,7 +840,7 @@ function renderBoard() {
     ...project.photos.map((item) => ({ kind: "photo", item })),
     ...project.notes.map((item) => ({ kind: "note", item }))
   ]
-    .sort((a, b) => (a.item.z ?? 1) - (b.item.z ?? 1))
+    .sort((a, b) => visualZIndex(a.item) - visualZIndex(b.item))
     .forEach(({ kind, item }) => {
       if (kind === "photo") renderPhoto(item);
       else if (kind === "note") renderNote(item);
@@ -867,11 +867,19 @@ function setPositionStyles(element, item) {
   element.style.top = `${item.y}px`;
   element.style.width = `${item.w}px`;
   element.style.height = `${item.h}px`;
-  element.style.zIndex = String(item.z ?? 1);
+  element.style.zIndex = String(visualZIndex(item));
   element.style.transform = `rotate(${item.rotation ?? 0}deg)`;
   element.dataset.id = item.id;
   element.dataset.kind = isPhotoItem(item) ? "photo" : "text" in item ? "note" : "decor";
   if (isAdminMode) element.classList.toggle("is-selected", selectedItem?.id === item.id);
+}
+
+function visualZIndex(item) {
+  const z = Number(item.z || 1);
+  if (isPhotoItem(item)) return 1000 + z;
+  if ("text" in item) return 3000 + z;
+  if (item.mediaId) return 4000 + z;
+  return 500 + z;
 }
 
 function renderPhoto(photo) {
@@ -898,7 +906,7 @@ function renderNote(note) {
   element.className = "note editable-item";
   setPositionStyles(element, note);
   element.style.background = note.color || "#d8bd8d";
-  element.textContent = note.text || "";
+  element.innerHTML = `<span class="note-text">${escapeHtml(note.text || "")}</span>`;
   addEditorHandles(element, note);
   bindBoardItem(element, note);
   board.appendChild(element);
@@ -966,7 +974,7 @@ function bindBoardItem(element, item) {
     board.querySelectorAll(".is-selected").forEach((selectedElement) => selectedElement.classList.remove("is-selected"));
     board.querySelectorAll(".editor-handle").forEach((handle) => handle.remove());
     element.classList.add("is-selected");
-    element.style.zIndex = String(item.z ?? 1);
+    element.style.zIndex = String(visualZIndex(item));
     addEditorHandles(element, item);
     const action = event.target.dataset.editorAction || "move";
     dragState = {
@@ -1073,7 +1081,7 @@ function applyElementPosition(element, item) {
   element.style.top = `${item.y}px`;
   element.style.width = `${item.w}px`;
   element.style.height = `${item.h}px`;
-  element.style.zIndex = String(item.z ?? 1);
+  element.style.zIndex = String(visualZIndex(item));
   element.style.transform = `rotate(${item.rotation ?? 0}deg)`;
 }
 

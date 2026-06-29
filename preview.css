@@ -400,12 +400,19 @@ button {
     0 18px 34px rgba(64, 38, 18, 0.24),
     2px 3px 0 rgba(64, 38, 18, 0.08);
   contain: layout paint;
+  isolation: isolate;
 }
 
 .note::before {
   top: -10px;
   left: 50%;
   transform: translateX(-50%) rotate(-4deg);
+}
+
+.note-text {
+  position: relative;
+  z-index: 5;
+  white-space: pre-line;
 }
 
 .scrap {
