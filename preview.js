@@ -7,7 +7,7 @@ const DEFAULT_BOARD_IMAGE_VERSION = "bg-jpg-board-v1";
 const DEFAULT_BOARD_SIZE = { width: 820, height: 1752 };
 const PHOTO_COUNT = 40;
 const PHOTO_FOLDER_VERSION = "numbered-photo-folder-v1";
-const STATIC_PROJECT_VERSION = "ngocnga-current-20260628-5";
+const STATIC_PROJECT_VERSION = "ngocnga-current-20260629-6";
 const PROJECT_SYNC_INTERVAL = 2500;
 const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "m4v"];
 const BACKGROUND_MUSIC_VOLUME = 0.42;
@@ -922,11 +922,11 @@ function renderDecor(decor) {
   } else if (decor.type === "flower") {
     element.innerHTML = "<i></i><i></i><i></i><i></i>";
   } else if (decor.type === "receipt") {
-    element.innerHTML = "<span>THE COFFEE HOUSE</span><b>22.04</b><small>for here</small>";
+    element.innerHTML = "";
   } else if (decor.type === "ticket") {
     element.innerHTML = "<span>CINEMA</span><b>22.04</b><small>admit one</small>";
   } else {
-    element.innerHTML = "<span>vintage paper</span>";
+    element.innerHTML = "";
   }
   addEditorHandles(element, decor);
   bindBoardItem(element, decor);

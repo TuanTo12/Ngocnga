@@ -1128,28 +1128,6 @@
   "decor": [
     {
       "mediaId": "",
-      "id": "s01",
-      "type": "receipt",
-      "x": 610,
-      "y": 30,
-      "w": 150,
-      "h": 82,
-      "rotation": 4,
-      "z": 6
-    },
-    {
-      "mediaId": "",
-      "id": "s02",
-      "type": "paper",
-      "x": 24,
-      "y": 666,
-      "w": 180,
-      "h": 94,
-      "rotation": -6,
-      "z": 5
-    },
-    {
-      "mediaId": "",
       "id": "s03",
       "type": "ticket",
       "x": 146,
