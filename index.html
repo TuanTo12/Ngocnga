@@ -7,6 +7,34 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>Fragments of Ngà</title>
+    <script>
+      (function () {
+        var measurementId = "G-D2ZEZMLRYT";
+        var host = window.location.hostname;
+        var isLocal =
+          host === "localhost" ||
+          host === "127.0.0.1" ||
+          host === "::1" ||
+          host.indexOf("192.168.") === 0 ||
+          host.indexOf("10.") === 0 ||
+          /^172\.(1[6-9]|2\d|3[0-1])\./.test(host);
+
+        if (isLocal) return;
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+
+        var script = document.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=" + measurementId;
+        document.head.appendChild(script);
+
+        window.gtag("js", new Date());
+        window.gtag("config", measurementId);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Mali:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
